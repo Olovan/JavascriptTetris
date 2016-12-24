@@ -136,6 +136,9 @@ function updateDifficulty( inputTime )
 	inputTime /= 1000; //convert to seconds
 	switch(Math.floor(inputTime/60)) //Increase difficulty every minute
 	{
+		case 0:
+			dropInterval = 700;
+			break;
 		case 1:
 			dropInterval = 600;
 			break;
