@@ -5,8 +5,9 @@ context.scale(20, 20);
 context.fillStyle = "#000";
 context.fillRect(0, 0, canvas.width, canvas.height);
 
-const dropInterval = 1000;
+var dropInterval = 700;
 var dropCounter = 0;
+var diffCounter = 0;
 
 var score = 0;
 const board = buildMatrix( 20, 12 );
@@ -52,6 +53,7 @@ function respawnPlayer()
 
 function restartGame()
 {
+	diffCounter = 0;
 	board.forEach( (row) => row.fill(0) );
 	updateScore( 0 );
 	respawnPlayer();
@@ -118,6 +120,8 @@ function update( time = 0 )
 	const deltaTime = time - lastFrameTime;
 	lastFrameTime = time;
 	dropCounter += deltaTime;
+	diffCounter += deltaTime;
+	updateDifficulty(diffCounter);
 	if(dropCounter >= dropInterval)
 	{
 		dropPlayer();
@@ -125,6 +129,27 @@ function update( time = 0 )
 	}
 	renderBoard();
 	requestAnimationFrame(update);
+}
+
+function updateDifficulty( inputTime )
+{
+	inputTime /= 1000; //convert to seconds
+	switch(Math.floor(inputTime/60)) //Increase difficulty every minute
+	{
+		case 1:
+			dropInterval = 600;
+			break;
+		case 2:
+			dropInterval = 500;
+			break;
+		case 3:
+			dropInterval = 400;
+			break;
+		case 4:
+			dropInterval = 300;
+			break;
+
+	}
 }
 
 function isColliding()
